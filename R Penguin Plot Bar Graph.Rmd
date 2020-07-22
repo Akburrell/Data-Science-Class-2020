@@ -1,0 +1,79 @@
+---
+title: "0715 data science pengiuns"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+#data set 
+library(remotes)
+remotes::install_github("allisonhorst/palmerpenguins")
+library(palmerpenguins)
+library(tidyverse)
+
+
+#variable class
+class(penguins$sex)
+class(penguins$body_mass_g)
+
+#variable levels 
+levels(penguins$sex)
+
+#Missing Data
+is.na(penguins)
+is.na(penguins$flipper_length_mm)
+is.na(penguins$sex)
+
+#Analysis with NA value
+penguins %>%
+  group_by(island) %>%
+  summarise(mean(bill_length_mm))
+  
+#NA counts bar graph
+penguins %>%
+  #group_by(species) %>%
+  select(everything()) %>%
+  summarise_all(funs(sum(is.na(.)))) %>%
+  pivot_longer(cols = 1:7, names_to = 'columns', values_to = 'NA_count') %>%
+  arrange(desc(NA_count)) %>%
+  ggplot(aes(y = columns, x = NA_count)) + geom_col(fill = '#F0E442') +
+  geom_label(aes(label = NA_count)) +
+  #   scale_fill_manual(values = c("darkorange","purple","cyan4")) +
+  theme_minimal() +
+  labs(title = "Cute Little Penguin NA Count")
+  
+#Summary
+summary(penguins)
+summary(penguins$species)
+summary(penguins$island)
+
+
+
+
+
+
+
+
